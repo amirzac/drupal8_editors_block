@@ -3,6 +3,7 @@
 namespace Drupal\frontkom_test\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\system\Controller\Http4xxController;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -18,7 +19,8 @@ class MainController extends ControllerBase{
 
   public function authorizedEditors()
   {
-    http_response_code(403);
+//    $httpController = new Http4xxController();
+//    return $httpController->on403();
 
     $block_manager = \Drupal::service('plugin.manager.block');
     $plugin_block = $block_manager->createInstance('authorized_editors');

@@ -17,11 +17,10 @@ class RouteSubscriber extends RouteSubscriberBase{
    */
   public function alterRoutes(RouteCollection $collection) {
     if ($route = $collection->get('entity.node.edit_form')) {
-
-      //check permission
       $route->setRequirement('_custom_access', 'frontkom_test.access_edit_page_checker::access');
+    }
 
-      //show 'Authorized Editors' block
+    if($route = $collection->get('system.403')) {
       $route->setDefault('_controller', '\Drupal\frontkom_test\Controller\MainController::authorizedEditors');
     }
   }
