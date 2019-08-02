@@ -2,9 +2,14 @@
 
 namespace Drupal\frontkom_test\Controller;
 
+use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\frontkom_test\Service\ErrorNotifier;
 use Drupal\system\Controller\Http4xxController;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Drupal\frontkom_test\Plugin\Block\EditorsBlock;
 
 /**
  * Class MainController
@@ -13,18 +18,48 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class MainController extends ControllerBase{
 
+  protected $errorNotifier;
+
+  private $requestStack;
+
+  private $pluginManager;
+
+  public function __construct(ErrorNotifier $errorNotifier, RequestStack $requestStack, PluginManagerInterface $pluginManager)
+  {
+    $this->errorNotifier = $errorNotifier;
+    $this->requestStack = $requestStack;
+    $this->pluginManager = $pluginManager;
+  }
+
   public function test() {
     return new Response('frontkom test');
   }
 
   public function authorizedEditors()
   {
-//    $httpController = new Http4xxController();
-//    return $httpController->on403();
+    /* @var \Drupal\node\Entity\Node $node */
+    $node = $this->requestStack->getCurrentRequest()->get('node');
 
-    $block_manager = \Drupal::service('plugin.manager.block');
-    $plugin_block = $block_manager->createInstance('authorized_editors');
+    /* @var EditorsBlock $editorsBlock */
+    $editorsBlock = $this->pluginManager->createInstance('authorized_editors');
 
-    return $plugin_block->build();
+    return $this->errorNotifier->showAccessDeniedMessage($node, new Http4xxController(), $editorsBlock);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public static function create(ContainerInterface $container)
+  {
+    /* @var ErrorNotifier $errorNotifier */
+    $errorNotifier = $container->get('frontkom_test:error_notifier');
+
+    /* @var RequestStack $requestStack */
+    $requestStack = $container->get('request_stack');
+
+    /* @var PluginManagerInterface $pluginManager */
+    $pluginManager = $container->get('plugin.manager.block');
+
+    return new static($errorNotifier, $requestStack, $pluginManager);
   }
 }

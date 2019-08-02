@@ -9,3 +9,6 @@ services:
     arguments: ['@current_user']
     tags:
       - { name: access_check, applies_to: _frontkom_test_access_check }
+
+  frontkom_test:error_notifier:
+    class: Drupal\frontkom_test\Service\ErrorNotifier
