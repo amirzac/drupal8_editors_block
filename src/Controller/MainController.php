@@ -42,8 +42,8 @@ class MainController extends ControllerBase{
 
     /* @var EditorsBlock $editorsBlock */
     $editorsBlock = $this->pluginManager->createInstance('authorized_editors');
-
-    return $this->errorNotifier->showAccessDeniedMessage($node, new Http4xxController(), $editorsBlock);
+    
+    return $this->errorNotifier->showAccessDeniedMessage($node, new Http4xxController(), $editorsBlock, $this->currentUser());
   }
 
   /**

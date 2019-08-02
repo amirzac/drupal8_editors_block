@@ -4,8 +4,8 @@ dependencies:
   module:
     - node
     - user
-id: node.field_editors
-field_name: field_editors
+id: node.editors
+field_name: editors
 entity_type: node
 type: entity_reference
 settings:

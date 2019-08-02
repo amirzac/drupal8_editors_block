@@ -54,7 +54,7 @@ class EditorsBlock extends BlockBase implements BlockPluginInterface, ContainerF
 
     $build['content'] = [
       '#theme' => 'editors-block',
-      '#editors' => $this->node->field_editors->referencedEntities() ?? [],
+      '#editors' => $this->node->editors->referencedEntities() ?? [],
     ];
     return $build;
   }

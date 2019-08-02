@@ -25,7 +25,7 @@ class EditPageAccessCheck implements AccessInterface{
 
     $registeredEditorsId = [$node->getOwnerId()];
 
-    foreach ($node->field_editors->getValue() as $itemReference) {
+    foreach ($node->editors->getValue() as $itemReference) {
       if(isset($itemReference['target_id']) && !in_array($itemReference['target_id'], $registeredEditorsId)) {
         array_push($registeredEditorsId, $itemReference['target_id']);
       }
