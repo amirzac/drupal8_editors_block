@@ -10,7 +10,7 @@ use Symfony\Component\Routing\RouteCollection;
  *
  * @package Drupal\frontkom_test\Routing
  */
-class RouteSubscriber extends RouteSubscriberBase{
+class RouteSubscriber extends RouteSubscriberBase {
 
   /**
    * {@inheritdoc}
@@ -20,8 +20,9 @@ class RouteSubscriber extends RouteSubscriberBase{
       $route->setRequirement('_custom_access', 'frontkom_test.access_edit_page_checker::access');
     }
 
-    if($route = $collection->get('system.403')) {
+    if ($route = $collection->get('system.403')) {
       $route->setDefault('_controller', '\Drupal\frontkom_test\Controller\MainController::authorizedEditors');
     }
   }
+
 }

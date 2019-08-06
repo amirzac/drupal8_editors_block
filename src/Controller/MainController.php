@@ -16,7 +16,7 @@ use Drupal\frontkom_test\Plugin\Block\EditorsBlock;
  *
  * @package Drupal\frontkom_test\Controller
  */
-class MainController extends ControllerBase{
+class MainController extends ControllerBase {
 
   protected $errorNotifier;
 
@@ -24,8 +24,11 @@ class MainController extends ControllerBase{
 
   private $pluginManager;
 
-  public function __construct(ErrorNotifier $errorNotifier, RequestStack $requestStack, PluginManagerInterface $pluginManager)
-  {
+  public function __construct(
+    ErrorNotifier $errorNotifier,
+    RequestStack $requestStack,
+    PluginManagerInterface $pluginManager
+  ) {
     $this->errorNotifier = $errorNotifier;
     $this->requestStack = $requestStack;
     $this->pluginManager = $pluginManager;
@@ -35,22 +38,25 @@ class MainController extends ControllerBase{
     return new Response('frontkom test');
   }
 
-  public function authorizedEditors()
-  {
+  public function authorizedEditors() {
     /* @var \Drupal\node\Entity\Node $node */
     $node = $this->requestStack->getCurrentRequest()->get('node');
 
     /* @var EditorsBlock $editorsBlock */
     $editorsBlock = $this->pluginManager->createInstance('authorized_editors');
-    
-    return $this->errorNotifier->showAccessDeniedMessage($node, new Http4xxController(), $editorsBlock, $this->currentUser());
+
+    return $this->errorNotifier->showAccessDeniedMessage(
+      $node,
+      new Http4xxController(),
+      $editorsBlock,
+      $this->currentUser()
+    );
   }
 
   /**
    * @inheritDoc
    */
-  public static function create(ContainerInterface $container)
-  {
+  public static function create(ContainerInterface $container) {
     /* @var ErrorNotifier $errorNotifier */
     $errorNotifier = $container->get('frontkom_test:error_notifier');
 
@@ -62,4 +68,5 @@ class MainController extends ControllerBase{
 
     return new static($errorNotifier, $requestStack, $pluginManager);
   }
+
 }

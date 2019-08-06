@@ -14,12 +14,21 @@ use Drupal\system\Controller\Http4xxController;
  */
 class ErrorNotifier {
 
-  public function showAccessDeniedMessage(?Node $node, Http4xxController $http4xxController, BlockPluginInterface $blockPlugin, AccountInterface $accountProxy):iterable
+  public function showAccessDeniedMessage(
+    ?Node $node,
+    Http4xxController $http4xxController,
+    BlockPluginInterface $blockPlugin,
+    AccountInterface $accountProxy
+  ):iterable
   {
-    if($accountProxy->isAuthenticated() && ($node instanceof Node) && ($node->getType() === 'page')) {
+    $nodeTypeIsPage = ($node->getType() === 'page');
+    $nodeIsEntity = ($node instanceof Node);
+
+    if ($accountProxy->isAuthenticated() && $nodeIsEntity && $nodeTypeIsPage) {
       return $blockPlugin->build();
     }
 
     return $http4xxController->on403();
   }
+
 }

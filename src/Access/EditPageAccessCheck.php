@@ -12,29 +12,35 @@ use Drupal\node\Entity\Node;
  *
  * @package Drupal\frontkom_test\Access
  */
-class EditPageAccessCheck implements AccessInterface{
+class EditPageAccessCheck implements AccessInterface {
 
   /**
    * {@inheritdoc}
    */
   public function access(AccountInterface $account, Node $node) {
 
-    if($node->getType() !== 'page') {
+    if ($node->getType() !== 'page') {
       return AccessResult::allowed();
     }
 
     $registeredEditorsId = [$node->getOwnerId()];
 
     foreach ($node->editors->getValue() as $itemReference) {
-      if(isset($itemReference['target_id']) && !in_array($itemReference['target_id'], $registeredEditorsId)) {
+
+      if (!isset($itemReference['target_id'])) {
+        continue;
+      }
+
+      if (!in_array($itemReference['target_id'], $registeredEditorsId)) {
         array_push($registeredEditorsId, $itemReference['target_id']);
       }
     }
 
-    if(!in_array($account->id(), $registeredEditorsId)) {
+    if (!in_array($account->id(), $registeredEditorsId)) {
       return AccessResult::neutral();
     }
 
     return AccessResult::allowed();
   }
+
 }

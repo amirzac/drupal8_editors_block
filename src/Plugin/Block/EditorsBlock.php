@@ -21,7 +21,10 @@ use Symfony\Component\HttpFoundation\RequestStack;
  *  admin_label = @Translation("Authorized editors"),
  * )
  */
-class EditorsBlock extends BlockBase implements BlockPluginInterface, ContainerFactoryPluginInterface {
+class EditorsBlock extends BlockBase implements
+  BlockPluginInterface,
+  ContainerFactoryPluginInterface
+{
 
   /**
    * @var NodeInterface
@@ -40,7 +43,12 @@ class EditorsBlock extends BlockBase implements BlockPluginInterface, ContainerF
     'page'
   ];
 
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, RequestStack $request) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    RequestStack $request
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->requestStack = $request;
     $this->initializeNode();
@@ -66,12 +74,11 @@ class EditorsBlock extends BlockBase implements BlockPluginInterface, ContainerF
     return AccessResult::allowedIf($account->isAuthenticated() && !is_null($this->node));
   }
 
-  private function initializeNode():bool
-  {
+  private function initializeNode():bool {
     $tempNode = $this->requestStack->getCurrentRequest()->get('node');
 
     try {
-      if($this->nodeIsValid($tempNode)) {
+      if ($this->nodeIsValid($tempNode)) {
         $this->node = $tempNode;
 
         return TRUE;
@@ -87,7 +94,12 @@ class EditorsBlock extends BlockBase implements BlockPluginInterface, ContainerF
     return in_array($node->getType(), $this->allowedNodeTypes);
   }
 
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(
+    ContainerInterface $container,
+    array $configuration,
+    $plugin_id,
+    $plugin_definition
+  ) {
     return new static(
       $configuration,
       $plugin_id,
@@ -95,4 +107,5 @@ class EditorsBlock extends BlockBase implements BlockPluginInterface, ContainerF
       $container->get('request_stack')
     );
   }
+
 }
