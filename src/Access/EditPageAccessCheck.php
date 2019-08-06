@@ -32,7 +32,7 @@ class EditPageAccessCheck implements AccessInterface{
     }
 
     if(!in_array($account->id(), $registeredEditorsId)) {
-      return AccessResult::forbidden('Custom message');
+      return AccessResult::neutral();
     }
 
     return AccessResult::allowed();

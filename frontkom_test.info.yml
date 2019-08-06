@@ -1,5 +1,5 @@
-name: 'Frontkom test assignment'
+name: 'Authorized Editors'
 type: module
-description: 'Frontkom test assignment'
+description: 'Checks user permission for editing page entity type. Adds "user reference" field for page entity type. Creates "Authorized editors" block with referenced users.'
 core: 8.x
 package: 'Frontkom'
